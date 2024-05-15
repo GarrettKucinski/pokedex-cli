@@ -17,23 +17,33 @@ type Cache struct {
 
 func (c *Cache) Add(key string, val []byte) {
 	c.mux.Lock()
+	defer c.mux.Unlock()
 	entry := CacheEntry{
 		createdAt: time.Now(),
 		val:       val,
 	}
 	c.entries[key] = entry
-	c.mux.Unlock()
 }
 
 func (c *Cache) Get(key string) (value []byte, found bool) {
 	c.mux.Lock()
+	defer c.mux.Unlock()
 	if entry, ok := c.entries[key]; ok {
-		c.mux.Unlock()
 		return entry.val, true
 	}
-	c.mux.Unlock()
 
 	return
+}
+
+func (c *Cache) reap(d time.Duration) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+	for key := range c.entries {
+		difference := time.Since(c.entries[key].createdAt) > d
+		if difference {
+			delete(c.entries, key)
+		}
+	}
 }
 
 func (c *Cache) reapLoop(d time.Duration) {
@@ -41,14 +51,7 @@ func (c *Cache) reapLoop(d time.Duration) {
 	defer ticker.Stop()
 
 	for range ticker.C {
-		for key := range c.entries {
-			difference := time.Since(c.entries[key].createdAt) > d
-			if difference {
-				c.mux.Lock()
-				delete(c.entries, key)
-				c.mux.Unlock()
-			}
-		}
+		c.reap(d)
 	}
 }
 
