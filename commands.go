@@ -1,16 +1,12 @@
 package main
 
-import (
-	"github.com/garrettkucinski/pokedex-cli/pkg/pokemonApi"
-)
-
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(cfg *config) error
 }
 
-type Commands struct{}
+// type Commands struct{}
 
 // Menu map[string]cliCommand
 // func (c *Commands) AddCommand(command cliCommand) {
@@ -19,7 +15,6 @@ type Commands struct{}
 // }
 
 func getCommands() map[string]cliCommand {
-	client := new(pokemonApi.MapClient)
 
 	return map[string]cliCommand{
 		"exit": {
@@ -35,12 +30,12 @@ func getCommands() map[string]cliCommand {
 		"map": {
 			name:        "map",
 			description: "Show the current map, additional calls return paginated results",
-			callback:    client.DisplayNextLocationList,
+			callback:    mapCommand,
 		},
 		"mapb": {
 			name:        "mapb",
 			description: "Go back the the previous map",
-			callback:    client.DisplayPrevLocationList,
+			callback:    mapbCommand,
 		},
 	}
 }
