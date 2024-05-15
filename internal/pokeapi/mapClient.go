@@ -2,10 +2,13 @@ package pokeapi
 
 import (
 	"errors"
+
+	"github.com/garrettkucinski/pokedex-cli/internal/pokecache"
 )
 
 type MapClient struct {
-	Data Data `json:"data"`
+	Data  Data             `json:"data"`
+	Cache *pokecache.Cache `json:"cache"`
 }
 
 func (mc *MapClient) DisplayNextLocationList() (displayError error) {
@@ -15,7 +18,7 @@ func (mc *MapClient) DisplayNextLocationList() (displayError error) {
 		locationUrl = *mc.Data.Next
 	}
 
-	if err := mc.Data.GetLocationData(locationUrl); err != nil {
+	if err := mc.Data.GetLocationData(locationUrl, mc.Cache); err != nil {
 		displayError = errors.New("cannot get next location")
 	}
 
@@ -28,7 +31,7 @@ func (mc *MapClient) DisplayNextLocationList() (displayError error) {
 
 func (mc *MapClient) DisplayPrevLocationList() (displayError error) {
 	if mc.Data.Previous != nil {
-		if err := mc.Data.GetLocationData(*mc.Data.Previous); err != nil {
+		if err := mc.Data.GetLocationData(*mc.Data.Previous, mc.Cache); err != nil {
 			displayError = errors.New("cannot get previous location")
 		}
 	} else {
