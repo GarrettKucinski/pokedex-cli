@@ -12,7 +12,7 @@ type MapClient struct {
 }
 
 func (mc *MapClient) DisplayNextLocationList() (displayError error) {
-	locationUrl := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+	locationUrl := "https://pokeapi.co/api/v2/location-area"
 
 	if mc.Data.Next != nil {
 		locationUrl = *mc.Data.Next

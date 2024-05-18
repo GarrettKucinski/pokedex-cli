@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	cache := pokecache.NewCache(1000 * 60 * 10)
-	client := new(pokeapi.MapClient)
-	client.Cache = cache
+	client := &pokeapi.MapClient{
+		Cache: pokecache.NewCache(1000 * 60 * 10),
+	}
 
 	cfg := &config{
 		mapClient: *client,
