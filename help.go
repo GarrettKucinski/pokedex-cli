@@ -1,8 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-func helpCommand(cfg *config) (helpError error) {
+	"github.com/garrettkucinski/pokedex-cli/internal/pokeapi"
+)
+
+func helpCommand(cfg *pokeapi.Config, args ...string) (helpError error) {
 	fmt.Println("Commands:")
 
 	commands := getCommands()

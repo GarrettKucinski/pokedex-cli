@@ -1,18 +1,14 @@
 package main
 
+import "github.com/garrettkucinski/pokedex-cli/internal/pokeapi"
+
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(cfg *config) error
+	callback    func(cfg *pokeapi.Config, args ...string) error
 }
 
-// type Commands struct{}
-
-// Menu map[string]cliCommand
-// func (c *Commands) AddCommand(command cliCommand) {
-// 	commandName := command.name
-// 	c[commandName] = command
-// }
+// TODO: an add command function would be cool here
 
 func getCommands() map[string]cliCommand {
 
@@ -36,6 +32,16 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Go back the the previous map",
 			callback:    mapbCommand,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Explore areas by name",
+			callback:    exploreCommand,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Catch a pokemon by throwing a Pokeball at it!",
+			callback:    catchCommand,
 		},
 	}
 }
