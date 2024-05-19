@@ -11,12 +11,10 @@ func catchCommand(cfg *pokeapi.Config, args ...string) (exploreError error) {
 
 	if len(args) > 0 {
 		pokemonName = args[0]
+		cfg.Client.CatchPokemon(cfg, pokemonName)
 	} else {
 		exploreError = errors.New("you need to specify a pokemon to catch")
-		return
 	}
-
-	cfg.Client.CatchPokemon(cfg, pokemonName)
 
 	return
 }

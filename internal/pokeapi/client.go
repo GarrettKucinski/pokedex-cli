@@ -32,7 +32,7 @@ func NewConfig() *Config {
 	return &Config{
 		Client: *client,
 		Pokedex: pokedex.Captures{
-			List: make(map[string]pokedex.Pokemon),
+			List: make(map[string]*pokedex.Pokemon),
 		},
 	}
 }
@@ -67,7 +67,7 @@ func (c *Client) CatchPokemon(cfg *Config, pokemonName string) (displayError err
 
 	if captured {
 		fmt.Printf("You caught %s!\n", data.Name)
-		cfg.Pokedex.Add(*data)
+		cfg.Pokedex.Add(data)
 	} else {
 		fmt.Printf("%s escaped!\n", data.Name)
 	}
